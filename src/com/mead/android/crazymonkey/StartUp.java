@@ -102,7 +102,7 @@ public class StartUp {
 		task.setAssignTime(new Date());
 
 		Callable<Task> runCallable = null;
-		if (build.getEmulatorType().equals("GENYMOTION")) {
+		if (build.getEmulatorType().equals("GENY_MOTION")) {
 			runCallable = new GenymotionRunner(build, task, sdk, new StreamTaskListener(getLoggerForTask(build, task)));
 		} else {
 			runCallable = new RunScripts(build, task, sdk, new StreamTaskListener(getLoggerForTask(build, task)));
