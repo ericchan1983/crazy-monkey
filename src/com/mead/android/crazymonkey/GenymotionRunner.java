@@ -96,7 +96,7 @@ public class GenymotionRunner extends AbstractRunner {
 		} else {
 			log(logger, String.format("Start the genymotion %s via '%s' scussfully.", task.getEmulator().getAvdName(), script));
 			log(logger, String.format("Genymotion is ready for use."));
-			this.getContext().setSerial(getSerialForGenyMotion("genymotion_" + task.getEmulator().getAvdName()) + ".ini");
+			this.getContext().setSerial(getSerialForGenyMotion("genymotion_" + task.getEmulator().getAvdName() + ".ini"));
 		}
 		
 		return result;
