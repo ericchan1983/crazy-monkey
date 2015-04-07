@@ -68,7 +68,8 @@ public class GenymotionRunner extends AbstractRunner {
 			return false;
 		}
 		
-		return connectGenymotion();
+		boolean connResult = connectGenymotion();
+		return connResult;
 		
 	}
 
@@ -150,6 +151,7 @@ public class GenymotionRunner extends AbstractRunner {
 				reader.close();
 			}
 		}
+		System.out.println("sn = " + line);
 		return line;
 	}
 }
