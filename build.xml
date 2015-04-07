@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar"
+	name="Create Runnable Jar for Project crazy-monkey with libraries in sub-folder">
+	<property environment="env" />
+	<property name="build.dir" value="." />
+	<property name="java.version.required" value="1.7" />
+	<property name="crazy_monkey_version" value="0.1" />
+
+	<path id="lib.classpath">
+		<fileset dir="${build.dir}/lib" includes="*.jar" />
+	</path>
+
+	<target name="create_run_jar" depends="clean, compile">
+	    <pathconvert property="run.classpath" pathsep=" ">
+			<path refid="lib.classpath" />
+			<mapper>
+				<chainedmapper>
+					<flattenmapper />
+					<globmapper from="*" to="lib/*" />
+				</chainedmapper>
+			</mapper>
+		</pathconvert>
+		
+		<jar destfile="${build.dir}/crazy-monkey-${crazy_monkey_version}.jar">
+			<manifest>
+				<attribute name="Manifest-Version" value="${crazy_monkey_version}" />
+				<attribute name="Main-Class" value="com.mead.android.crazymonkey.StartUp" />
+				<attribute name="Class-Path" value="${run.classpath}" />
+			</manifest>
+			<fileset dir="${build.dir}/bin" />
+		</jar>
+		<chmod dir="${build.dir}" perm="ugo+rx" includes="**/*.sh"/>
+	</target>
+
+	<target name="clean" depends="">
+		<delete file="${build.dir}/crazy-monkey-*.jar" />
+		<delete dir="${build.dir}/bin" />
+		<mkdir dir="${build.dir}/bin" />
+	</target>
+
+	<target name="compile" depends="check-java-version">
+		<javac srcdir="${build.dir}/src" destdir="${build.dir}/bin"
+			classpathref="lib.classpath" debug="true" encoding="UTF-8"
+			includeAntRuntime="false" nowarn="true" target="1.7" />
+		<copy file="${build.dir}/src/com/mead/android/crazymonkey/Messages.properties" todir="${build.dir}/bin/com/mead/android/crazymonkey"/>
+	</target>
+
+	<target name="check-java-version"
+		description="Confirms Ant is running under correct Java version">
+		<echo message="Java Version: ${java.version}" />
+		<echo message="Java home: ${java.home}" />
+		<fail
+			message="Unsupported Java version: ${java.version}. Java version ${java.version.required} is required.">
+			<condition>
+				<not>
+					<matches pattern="^${java.version.required}" string="${java.version}" />
+				</not>
+			</condition>
+		</fail>
+	</target>
+</project>
