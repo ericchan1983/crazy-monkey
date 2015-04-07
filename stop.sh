@@ -4,21 +4,35 @@
 source ./setenv.sh
 
 echo "-------------------- Clean the enviroment --------------------"
-# Kill the adb
-echo "[Android Emulator] Kill the adb server..."
-pgrep adb | xargs -rt kill -9
 
-# Kill the emulator process
-echo "[Android Emulator] Kill the emulator processes..."
-pgrep emulator64-arm | xargs -rt kill -9
+if [ "$EMULATOR_TYPE" = "GENY_MOTION" ] 
+then
 
-# Clean the lock file of avd
-echo "[Android Emulator] Clean the locked avd files..."
-cd $ANDROID_SDK_HOME/.android/avd && find $ANDROID_SDK_HOME/.android/avd -name *.lock | xargs -rt rm -rf  | sed 's/^/[Android Emulator] &/g'
-echo "[Android Emulator] Clean the modem files..."
-cd $ANDROID_SDK_HOME/.android && rm modem-nv-ram-*
-#echo "[Android Emulator] Clean the tmp files..."
-#cd /tmp/android-$USER && rm * 
+	echo "[Genymotion Emulator] Kill the adb server..."
+	pgrep adb | xargs -rt kill -9
+
+	echo "[Genymotion Emulator] Kill the player..."
+	pgrep player | xargs -rt kill -9
+
+else
+
+	# Kill the adb
+	echo "[Android Emulator] Kill the adb server..."
+	pgrep adb | xargs -rt kill -9
+
+	# Kill the emulator process
+	echo "[Android Emulator] Kill the emulator processes..."
+	pgrep emulator64-arm | xargs -rt kill -9
+
+	# Clean the lock file of avd
+	echo "[Android Emulator] Clean the locked avd files..."
+	cd $ANDROID_SDK_HOME/.android/avd && find $ANDROID_SDK_HOME/.android/avd -name *.lock | xargs -rt rm -rf  | sed 's/^/[Android Emulator] &/g'
+	echo "[Android Emulator] Clean the modem files..."
+	cd $ANDROID_SDK_HOME/.android && rm modem-nv-ram-*
+
+	#echo "[Android Emulator] Clean the tmp files..."
+	#cd /tmp/android-$USER && rm * 
+fi
 
 # Kill the java
 echo "[Crazy Monkey] Kill the crazy monkey java process..."

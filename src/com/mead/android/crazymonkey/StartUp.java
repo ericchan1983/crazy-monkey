@@ -29,8 +29,19 @@ public class StartUp {
 		ExecutorService threadPool = null;
 
 		try {
-			final CrazyMonkeyBuild build = new CrazyMonkeyBuild();
+			
 			String macAddr = Utils.getMACAddr();
+			String emulatorType = "ANDROID";
+			
+			if (args != null && args.length > 0 && args[0] != null && !args[0].isEmpty()) {
+				macAddr = args[0].replaceAll(":", "-").toUpperCase();
+			}
+			
+			if (args != null && args.length > 0 && args[1] != null && !args[1].isEmpty()) {
+				emulatorType = args[1];
+			}
+			
+			final CrazyMonkeyBuild build = new CrazyMonkeyBuild(emulatorType);
 
 			threadPool = Executors.newFixedThreadPool(build.getNumberOfEmulators());
 			final AndroidSdk sdk = new AndroidSdk(build.getAndroidSdkHome(), build.getAndroidRootHome());
@@ -90,7 +101,13 @@ public class StartUp {
 		System.out.print(String.format("[" + new Date() + "] - The %s task '%s' has started. \r\n", task.getEmulator().getAvdName(), task.getId()));
 		task.setAssignTime(new Date());
 
-		Callable<Task> runCallable = new RunScripts(build, task, sdk, new StreamTaskListener(getLoggerForTask(build, task)));
+		Callable<Task> runCallable = null;
+		if (build.getEmulatorType().equals("GENYMOTION")) {
+			runCallable = new GenymotionRunner(build, task, sdk, new StreamTaskListener(getLoggerForTask(build, task)));
+		} else {
+			runCallable = new RunScripts(build, task, sdk, new StreamTaskListener(getLoggerForTask(build, task)));
+		}
+		
 		final Future<Task> future = cs.submit(runCallable);
 
 		ScheduledExecutorService canceller = Executors.newSingleThreadScheduledExecutor();

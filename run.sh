@@ -17,6 +17,8 @@ cd $CRAZY_MONKEY_HOME && /bin/bash ./stop.sh
 # Run the vpn client
 cd $VPN_CLINET_HOME && ./autorun
 
+MAC_ADDRESS=`/sbin/ifconfig $NETWORK_INTERFACE | grep HWaddr | awk '{print $5}'`
+
 # Run the testing
-$JAVA_HOME/bin/java -jar $CRAZY_MONKEY_HOME/crazy-monkey-0.1.jar
+$JAVA_HOME/bin/java -jar $CRAZY_MONKEY_HOME/crazy-monkey-0.1.jar $MAC_ADDRESS $EMULATOR_TYPE
 

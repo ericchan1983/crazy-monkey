@@ -57,6 +57,8 @@ public class CrazyMonkeyBuild {
 	
 	private int[] emulators;
 	
+	private String emulatorType = "ANDROID";
+	
 	public static final int ADB_CONNECT_TIMEOUT_MS = 5 * 60 * 1000;
 	
 	/** Duration by which emulator booting should normally complete. */
@@ -67,7 +69,9 @@ public class CrazyMonkeyBuild {
     
     public static final String EMULATOR_NAME_PREFIX = "Android_Monkey_";
     
-	public CrazyMonkeyBuild() throws IOException {
+	public CrazyMonkeyBuild(String emulatorType) throws IOException {
+		this.emulatorType = emulatorType;
+		
 		File crazyMonkeyFile = Utils.getCrazyMonkeyHomeDirectory(".");
 		this.setCrazyMonkeyHome(crazyMonkeyFile.getAbsolutePath());
 		
@@ -432,5 +436,13 @@ public class CrazyMonkeyBuild {
 	public synchronized void freeEmulator (String emulatorName) {
 		int index = Integer.parseInt(emulatorName.substring(CrazyMonkeyBuild.EMULATOR_NAME_PREFIX.length()));
 		this.freeEmulatorIndex(index);
+	}
+
+	public String getEmulatorType() {
+		return emulatorType;
+	}
+
+	public void setEmulatorType(String emulatorType) {
+		this.emulatorType = emulatorType;
 	}
 }
