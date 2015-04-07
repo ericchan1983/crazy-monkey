@@ -1,6 +1,8 @@
 #!/bin/bash
 sleep 15
 
+vm_name=$1
+
 MAC=`VBoxManage showvminfo ${vm_name} | grep MAC | grep vboxnet0 | awk -F ":" '{print $3}' | cut -c 2-13`
 
 MAC=`echo ${MAC} | awk  'BEGIN{FS=""}{print $1$2":"$3$4":"$5$6":"$7$8":"$9$10":"$11$12}'`
