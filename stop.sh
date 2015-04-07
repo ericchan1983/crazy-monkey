@@ -14,6 +14,9 @@ then
 	echo "[Genymotion Emulator] Kill the player..."
 	pgrep player | xargs -rt kill -9
 
+	echo "[Genymotion Emulator] Kill the VBoxHeadless..."
+	pgrep VBoxHeadless | xargs -rt kill -9
+
 else
 
 	# Kill the adb
