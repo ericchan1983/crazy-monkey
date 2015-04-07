@@ -16,6 +16,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.mead.android.crazymonkey.build.Builder;
+import com.mead.android.crazymonkey.build.CommandLineBuilder;
 import com.mead.android.crazymonkey.build.InstallBuilder;
 import com.mead.android.crazymonkey.build.RunBatBuilder;
 import com.mead.android.crazymonkey.build.RunShellBuilder;
@@ -168,8 +169,8 @@ public abstract class AbstractRunner implements java.util.concurrent.Callable<Ta
 		return result;
 	}
 
-	public Builder getBuilder(String script, List<String> args) {
-		Builder builder = null;
+	public CommandLineBuilder getBuilder(String script, List<String> args) {
+		CommandLineBuilder builder = null;
 		if (!Utils.isUnix()) {
 			builder = new RunBatBuilder(script, args);
 		} else {
