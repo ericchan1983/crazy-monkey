@@ -30,8 +30,15 @@ public class AndroidEmulatorContext {
 		this.build = build;
 		this.userPort = ports[0];
 		this.adbPort = ports[1];
-		//this.adbServerPort = ports[2];
 		this.serial = EMULATOR_PREFIX + userPort;
+		this.sdk = sdk;
+		this.taskListener = taskListener;
+	}
+	
+	public AndroidEmulatorContext(CrazyMonkeyBuild build, String serial, AndroidSdk sdk, StreamTaskListener taskListener) {
+		super();
+		this.build = build;
+		this.serial = serial;
 		this.sdk = sdk;
 		this.taskListener = taskListener;
 	}

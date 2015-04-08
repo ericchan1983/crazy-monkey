@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -29,11 +28,11 @@ public class GenymotionRunner extends AbstractRunner {
 
 	@Override
 	public boolean startUp() throws IOException, InterruptedException {
-		
+
 		if (logger == null) {
 			logger = taskListener.getLogger();
 		}
-		
+
 		String script = build.getTestScriptPath() + "//genymotion_start.bat";
 		if (Utils.isUnix()) {
 			script = build.getTestScriptPath() + "//genymotion_start.sh";
@@ -44,14 +43,13 @@ public class GenymotionRunner extends AbstractRunner {
 
 		CommandLineBuilder builder = this.getBuilder(script, args);
 
-		final PrintStream logger = taskListener.getLogger();
 		File file = new File(script);
 
 		if (!file.exists()) {
 			AndroidEmulator.log(logger, String.format("The script file '%s' is not existing.", script));
 			return false;
 		}
-		
+
 		try {
 			Map<String, String> buildEnvironment = new TreeMap<String, String>();
 			Map<String, String> sysEnv = System.getenv();
@@ -67,20 +65,24 @@ public class GenymotionRunner extends AbstractRunner {
 			AndroidEmulator.log(logger, String.format("Run the batch file '%s' failed.", script));
 			return false;
 		}
-		
+
 		boolean connResult = connectGenymotion();
+
+		String serial = getSerialForGenyMotion("genymotion_" + task.getEmulator().getAvdName() + ".ini");
+		final AndroidEmulatorContext emu = new AndroidEmulatorContext(build, serial, androidSdk, taskListener);
+		this.setContext(emu);
+		log(logger, String.format("Genymotion is ready for use on '%s'.", serial));
+
 		return connResult;
-		
 	}
 
-	
 	public boolean connectGenymotion() throws IOException, InterruptedException {
 		boolean result = false;
-		
+
 		if (logger == null) {
 			logger = taskListener.getLogger();
 		}
-		
+
 		String script = build.getTestScriptPath() + "//genymotion_get_ip.bat";
 		if (Utils.isUnix()) {
 			script = build.getTestScriptPath() + "//genymotion_get_ip.sh";
@@ -90,19 +92,17 @@ public class GenymotionRunner extends AbstractRunner {
 		args.add(task.getEmulator().getAvdName());
 		Builder builder = this.getBuilder(script, args);
 		result = builder.perform(build, androidSdk, task.getEmulator(), context, taskListener, "Success");
-		
+
 		if (!result) {
 			log(logger, String.format("Start the geny motion %s via '%s' failed.", task.getEmulator().getAvdName(), script));
 			task.setStatus(STATUS.NOT_BUILT);
 		} else {
 			log(logger, String.format("Start the genymotion %s via '%s' scussfully.", task.getEmulator().getAvdName(), script));
-			log(logger, String.format("Genymotion is ready for use."));
-			this.getContext().setSerial(getSerialForGenyMotion("genymotion_" + task.getEmulator().getAvdName() + ".ini"));
 		}
-		
+
 		return result;
 	}
-	
+
 	@Override
 	public boolean tearDown() throws IOException, InterruptedException {
 		boolean result = false;
@@ -110,17 +110,17 @@ public class GenymotionRunner extends AbstractRunner {
 			if (logger == null) {
 				logger = taskListener.getLogger();
 			}
-			
+
 			String script = build.getTestScriptPath() + "//genymotion_stop.bat";
 			if (Utils.isUnix()) {
 				script = build.getTestScriptPath() + "//genymotion_stop.sh";
 			}
-	
+
 			List<String> args = new ArrayList<String>();
 			args.add(task.getEmulator().getAvdName());
 			Builder builder = this.getBuilder(script, args);
 			result = builder.perform(build, androidSdk, task.getEmulator(), context, taskListener, "Success");
-			
+
 			if (!result) {
 				log(logger, String.format("Kill the geny motion via '%s' failed.", script));
 			} else {
@@ -131,9 +131,10 @@ public class GenymotionRunner extends AbstractRunner {
 		}
 		return result;
 	}
-	
+
 	/**
-	 * Get the serial 
+	 * Get the serial
+	 * 
 	 * @param fileName
 	 * @return
 	 * @throws IOException
@@ -151,7 +152,6 @@ public class GenymotionRunner extends AbstractRunner {
 				reader.close();
 			}
 		}
-		System.out.println("sn = " + line);
 		return line;
 	}
 }
