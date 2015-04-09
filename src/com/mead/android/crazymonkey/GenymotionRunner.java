@@ -76,7 +76,7 @@ public class GenymotionRunner extends AbstractRunner {
 		}
 
 		// Monitor device for boot completion signal
-		boolean ignoreProcess = !Utils.isUnix() && androidSdk.getSdkToolsVersion() >= 12;
+		boolean ignoreProcess = true;
 		log(logger, Messages.WAITING_FOR_BOOT_COMPLETION());
 		int bootTimeout = CrazyMonkeyBuild.BOOT_COMPLETE_TIMEOUT_MS * 2;
 		boolean bootSucceeded = waitForBootCompletion(ignoreProcess, bootTimeout, emuConfig, emu);

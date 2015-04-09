@@ -14,7 +14,7 @@ do
 	if [ -n "$IP" ] && [ "$IP" != "value" ]; then
 		# ping_test=`ping ${IP} -c 3 | grep rtt | sed 's/rtt //g'`
 
-		$ANDROID_SDK_HOME/platform-tools/adb &>/dev/null -s $IP:5555 shell echo READY && result=1 || result=0
+		$ANDROID_SDK_HOME/platform-tools/adb -s $IP:5555 shell echo READY && result=1 || result=0
 
 		if [ "$result" = "1" ]; then
 			echo $IP:5555 > $CRAZY_MONKEY_HOME/userdata/genymotion_$vm_name.ini
