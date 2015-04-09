@@ -14,7 +14,7 @@ public class RunShellBuilder extends CommandLineBuilder {
 		List<String> cmds = new ArrayList<String>();
 
 		cmds.add("/bin/sh");
-		cmds.add("-xe");
+		cmds.add("-x");
 		cmds.add(script);
 		cmds.addAll(args);
 

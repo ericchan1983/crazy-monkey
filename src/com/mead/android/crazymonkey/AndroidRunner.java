@@ -625,58 +625,6 @@ public class AndroidRunner extends AbstractRunner {
     }
     
     
-	/**
-	 * Checks whether the emulator running on the given port has finished booting yet, or times out.
-	 * 
-	 * @param ignoreProcess Whether to bypass checking that the process is alive (e.g. on Windows).
-	 * @param timeout How long to keep trying (in milliseconds) before giving up.
-	 * @param emu The emulator context
-	 * @return <code>true</code> if the emulator has booted, <code>false</code> if we timed-out.
-	 */
-	private boolean waitForBootCompletion(final boolean ignoreProcess, final int timeout, AndroidEmulator config, AndroidEmulatorContext emu) {
-		long start = System.currentTimeMillis();
-		int sleep = timeout / (int) (Math.sqrt(timeout / 1000) * 2);
-
-		int apiLevel = config.getOsVersion().getSdkLevel();
-
-		// Other tools use the "bootanim" variant, which supposedly signifies the system has booted a bit further;
-		// though this doesn't appear to be available on Android 1.5, while it should work fine on Android 1.6+
-		final boolean isOldApi = apiLevel > 0 && apiLevel < 4;
-		final String cmd = isOldApi ? "dev.bootcomplete" : "sys.boot_completed";
-		final String expectedAnswer = "1";
-		final String args = String.format("-s %s shell getprop %s", emu.getSerial(), cmd);
-		ArgumentListBuilder bootCheckCmd = emu.getToolCommand(Tool.ADB, args);
-
-		try {
-			final long adbTimeout = timeout / 8;
-			while (System.currentTimeMillis() < start + timeout && (ignoreProcess || emu.getProcess().isAlive())) {
-				ByteArrayOutputStream stream = new ByteArrayOutputStream(16);
-
-				// Run "getprop", timing-out in case adb hangs
-				LocalProc proc = emu.getProcStarter(bootCheckCmd).stdout(stream).start();
-				int retVal = proc.joinWithTimeout(adbTimeout, TimeUnit.MILLISECONDS, emu.getTaskListener());
-				if (retVal == 0) {
-					// If boot is complete, our work here is done
-					String result = stream.toString().trim();
-					if (result.equals(expectedAnswer)) {
-						return true;
-					}
-				}
-
-				// "getprop" failed, so sleep and try again later
-				Thread.sleep(sleep);
-			}
-		} catch (InterruptedException ex) {
-			log(emu.logger(), Messages.INTERRUPTED_DURING_BOOT_COMPLETION());
-		} catch (IOException ex) {
-			log(emu.logger(), Messages.COULD_NOT_CHECK_BOOT_COMPLETION());
-			ex.printStackTrace(emu.logger());
-		}
-
-		return false;
-	}
-    
-    
     /**
      * Called when this wrapper needs to exit, so we need to clean up some processes etc.
      * @param emulatorConfig The emulator being run.
