@@ -2,6 +2,9 @@
 
 vm_name=$1
 
-vboxmanage snapshot $vm_name restore "factory"
+VBoxManage snapshot $vm_name restore "factory"
 
-$CRAZY_MONKEY_HOME/../genymotion/player --vm-name $vm_name & > /dev/null 2>&1
+# screen VBoxManage -startvm $vm_name
+screen $CRAZY_MONKEY_HOME/../genymotion/player --vm-name $vm_name
+
+exit 0
