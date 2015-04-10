@@ -1,5 +1,5 @@
 #!/bin/bash
-sleep 20
+sleep 10
 
 vm_name=$1
 try_times=0
