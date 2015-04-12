@@ -36,6 +36,9 @@
 		<delete file="${build.dir}/crazy-monkey-*.jar" />
 		<delete dir="${build.dir}/bin" />
 		<mkdir dir="${build.dir}/bin" />
+		<mkdir dir="${build.dir}/apk" />
+		<mkdir dir="${build.dir}/logs" />
+		<mkdir dir="${build.dir}/userdata" />
 	</target>
 
 	<target name="compile" depends="check-java-version">
