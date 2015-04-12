@@ -1,9 +1,13 @@
-/apk
+*.apk
+/apk/*.sh
+/apk/*.bat
 /bin
 /logs
 /dist
-/userdata
+/userdata/*.ini
+/userdata/*.txt
 *.class
 .classpath
-crazy-monkey-0.1.jar
-/config-dev.ini
+.project
+crazy-monkey-*.jar
+config-dev.ini
