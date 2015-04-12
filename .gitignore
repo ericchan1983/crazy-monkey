@@ -1,11 +1,9 @@
 *.apk
-/apk/*.sh
-/apk/*.bat
+/apk
 /bin
 /logs
 /dist
-/userdata/*.ini
-/userdata/*.txt
+/userdata
 *.class
 .classpath
 .project
