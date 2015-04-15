@@ -2,8 +2,9 @@
 
 # set the env
 source ./setenv.sh
-
 echo "-------------------- Clean the enviroment --------------------"
+# reset the vpn state
+cd $CRAZY_MONKEY_HOME && /bin/bash ./reset_vpn.sh
 
 if [ "$EMULATOR_TYPE" = "GENY_MOTION" ] 
 then
