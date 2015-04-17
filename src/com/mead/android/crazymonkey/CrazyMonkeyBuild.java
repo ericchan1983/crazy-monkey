@@ -59,6 +59,8 @@ public class CrazyMonkeyBuild {
 	
 	private String emulatorType = "ANDROID";
 	
+	private boolean isConnectToVPN = false;
+	
 	public static final int ADB_CONNECT_TIMEOUT_MS = 5 * 60 * 1000;
 	
 	/** Duration by which emulator booting should normally complete. */
@@ -135,6 +137,12 @@ public class CrazyMonkeyBuild {
 		
 		try {
 			this.setRunScriptTimeout(Integer.parseInt(config.get("emulator.run_script_timeout")));
+		} catch (NumberFormatException e) {
+
+		}
+		
+		try {
+			this.setConnectToVPN(Boolean.valueOf(config.get("emulator.connect_to_vpn")));
 		} catch (NumberFormatException e) {
 
 		}
@@ -445,4 +453,13 @@ public class CrazyMonkeyBuild {
 	public void setEmulatorType(String emulatorType) {
 		this.emulatorType = emulatorType;
 	}
+	
+	public boolean isConnectToVPN() {
+		return isConnectToVPN;
+	}
+
+	public void setConnectToVPN(boolean isConnectToVPN) {
+		this.isConnectToVPN = isConnectToVPN;
+	}
+
 }

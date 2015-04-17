@@ -29,7 +29,6 @@ import com.mead.android.crazymonkey.persistence.TaskDAO;
 import com.mead.android.crazymonkey.process.ArgumentListBuilder;
 import com.mead.android.crazymonkey.process.LocalProc;
 import com.mead.android.crazymonkey.sdk.AndroidSdk;
-import com.mead.android.crazymonkey.sdk.SdkInstallationException;
 import com.mead.android.crazymonkey.sdk.Tool;
 import com.mead.android.crazymonkey.util.Utils;
 
@@ -74,6 +73,15 @@ public abstract class AbstractRunner implements java.util.concurrent.Callable<Ta
 				boolean configPhoneSuccess = configPhoneInfo();
 				
 				if (configPhoneSuccess) {
+					
+					Thread.sleep(3000);
+					// connect to vpn if necessary
+					if (build.isConnectToVPN()) {
+						if (!switchVPN()) {
+							return task;
+						}
+					}
+					
 					boolean result = false;
 					// install the apk file
 					Thread.sleep(build.getInstallApkDelay() * 1000);
@@ -235,41 +243,44 @@ public abstract class AbstractRunner implements java.util.concurrent.Callable<Ta
 	}
 
 	public synchronized boolean configPhoneInfo() throws IOException, InterruptedException {
-
 		if (logger == null) {
 			logger = taskListener.getLogger();
 		}
-
 		writeDeviceTxt();
-
 		String script = build.getTestScriptPath() + "//config_phone.bat";
 		if (Utils.isUnix()) {
 			script = build.getTestScriptPath() + "//config_phone.sh";
 		}
-
 		List<String> args = new ArrayList<String>();
 		args.add(String.valueOf(context.getSerial()));
-
-		String androidToolsDir = "";
-		if (androidSdk.hasKnownRoot()) {
-			try {
-				androidToolsDir = androidSdk.getSdkRoot() + Tool.EMULATOR.findInSdk(androidSdk);
-			} catch (SdkInstallationException e) {
-				androidToolsDir = "";
-			}
-		} else {
-			androidToolsDir = "";
-		}
-		args.add(androidToolsDir);
-
 		Builder builder = this.getBuilder(script, args);
-
 		boolean result = builder.perform(build, androidSdk, task.getEmulator(), context, taskListener, "OK (1 test)");
 		if (!result) {
 			log(logger, String.format("Config the phone information '%s' failed.", script));
 			task.setStatus(STATUS.NOT_BUILT);
 		} else {
 			log(logger, String.format("Config the phone information '%s' scussfully.", script));
+		}
+		return result;
+	}
+	
+	public boolean switchVPN() throws IOException, InterruptedException {
+		if (logger == null) {
+			logger = taskListener.getLogger();
+		}
+		String script = build.getTestScriptPath() + "//connect_vpn.bat";
+		if (Utils.isUnix()) {
+			script = build.getTestScriptPath() + "//connect_vpn.sh";
+		}
+		List<String> args = new ArrayList<String>();
+		args.add(String.valueOf(context.getSerial()));
+		Builder builder = this.getBuilder(script, args);
+		boolean result = builder.perform(build, androidSdk, task.getEmulator(), context, taskListener, "Monkey success.");
+		if (!result) {
+			log(logger, String.format("Connect to VPN '%s' failed.", script));
+			task.setStatus(STATUS.NOT_BUILT);
+		} else {
+			log(logger, String.format("Connect to VPN '%s' scussfully.", script));
 		}
 		return result;
 	}
