@@ -1,5 +1,2 @@
 #!/bin/bash
-source ./setenv.sh
-cd $CRAZY_MONKEY_HOME
-mkdir logs
-/bin/sh ./run.sh &> ./logs/console_`date '+%Y-%m-%dT%H-%M-%S'`_log
+cd /home/android/crazy-monkey/crazy-monkey && /bin/bash /home/android/crazy-monkey/crazy-monkey/run.sh &> ./logs/console_`date '+%Y-%m-%dT%H-%M-%S'`_log

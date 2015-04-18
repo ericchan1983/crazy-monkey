@@ -5,8 +5,8 @@ source ./setenv.sh
 cd $CRAZY_MONKEY_HOME && /bin/bash ./reset_vpn.sh
 
 # Git update and build
-echo "[Crazy Monkey] Update the crazy monkey code..."
-cd $CRAZY_MONKEY_HOME && git pull
+#echo "[Crazy Monkey] Update the crazy monkey code..."
+#cd $CRAZY_MONKEY_HOME && git pull
 
 echo "[Crazy Monkey] Build the project..."
 cd $CRAZY_MONKEY_HOME && $ANT_HOME/bin/ant
