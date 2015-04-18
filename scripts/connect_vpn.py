@@ -22,7 +22,7 @@ device.touch(160, 160, 'DOWN_AND_UP')
 MonkeyRunner.sleep(10)
 
 print "Click Trust"
-device.touch(50, 365, 'DOWN_AND_UP')
+device.touch(50, 345, 'DOWN_AND_UP')
 
 MonkeyRunner.sleep(10)
 
