@@ -64,7 +64,7 @@ public class CrazyMonkeyBuild {
 	public static final int ADB_CONNECT_TIMEOUT_MS = 5 * 60 * 1000;
 	
 	/** Duration by which emulator booting should normally complete. */
-    public static final int BOOT_COMPLETE_TIMEOUT_MS = 5 * 360 * 1000;
+    public static final int BOOT_COMPLETE_TIMEOUT_MS = 5 * 60 * 1000;
     
     /** Interval during which killing a process should complete. */
     public static final int KILL_PROCESS_TIMEOUT_MS = 5 * 10 * 1000;
