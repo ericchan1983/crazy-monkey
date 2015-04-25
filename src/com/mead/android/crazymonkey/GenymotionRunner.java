@@ -170,27 +170,33 @@ public class GenymotionRunner extends AbstractRunner {
 	public boolean tearDown() throws IOException, InterruptedException {
 		boolean result = false;
 		try {
-			if (logger == null) {
-				logger = taskListener.getLogger();
-			}
-
-			String script = build.getTestScriptPath() + "//genymotion_stop.bat";
-			if (Utils.isUnix()) {
-				script = build.getTestScriptPath() + "//genymotion_stop.sh";
-			}
-
-			List<String> args = new ArrayList<String>();
-			args.add(task.getEmulator().getAvdName());
-			Builder builder = this.getBuilder(script, args);
-			result = builder.perform(build, androidSdk, task.getEmulator(), context, taskListener, "Success");
-
-			if (!result) {
-				log(logger, String.format("Kill the geny motion via '%s' failed.", script));
-			} else {
-				log(logger, String.format("Kill the geny motion via '%s' scussfully.", script));
-			}
+			result = stopGenymotion();
 		} finally {
 			build.freeEmulator(task.getEmulator().getAvdName());
+		}
+		return result;
+	}
+
+	public boolean stopGenymotion() throws IOException, InterruptedException {
+		boolean result;
+		if (logger == null) {
+			logger = taskListener.getLogger();
+		}
+
+		String script = build.getTestScriptPath() + "//genymotion_stop.bat";
+		if (Utils.isUnix()) {
+			script = build.getTestScriptPath() + "//genymotion_stop.sh";
+		}
+
+		List<String> args = new ArrayList<String>();
+		args.add(task.getEmulator().getAvdName());
+		Builder builder = this.getBuilder(script, args);
+		result = builder.perform(build, androidSdk, task.getEmulator(), context, taskListener, "Success");
+
+		if (!result) {
+			log(logger, String.format("Kill the geny motion via '%s' failed.", script));
+		} else {
+			log(logger, String.format("Kill the geny motion via '%s' scussfully.", script));
 		}
 		return result;
 	}
