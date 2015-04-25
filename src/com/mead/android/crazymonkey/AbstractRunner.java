@@ -66,7 +66,19 @@ public abstract class AbstractRunner implements java.util.concurrent.Callable<Ta
 			// start up the env
 			Thread.sleep(3000);
 			boolean isRunEmulatorSuccess = startUp();
-
+			
+			if (!isRunEmulatorSuccess) {
+				return task;
+			}
+			
+			Thread.sleep(build.getConfigPhoneDelay() * 1000);
+			boolean writeBuildProp = writeBuildProp();
+			if (!writeBuildProp) {
+				return task;
+			}
+			
+			isRunEmulatorSuccess = startUp();
+			
 			if (isRunEmulatorSuccess) {
 				// configure the phone
 				Thread.sleep(build.getConfigPhoneDelay() * 1000);
@@ -86,6 +98,7 @@ public abstract class AbstractRunner implements java.util.concurrent.Callable<Ta
 					// install the apk file
 					Thread.sleep(build.getInstallApkDelay() * 1000);
 					Builder installBuilder = InstallBuilder.getInstance(task);
+					
 					synchronized (this) {
 						result = installBuilder.perform(build, androidSdk, task.getEmulator(), context, taskListener, "Success");
 					}
@@ -242,17 +255,20 @@ public abstract class AbstractRunner implements java.util.concurrent.Callable<Ta
 		return builder;
 	}
 
-	public synchronized boolean configPhoneInfo() throws IOException, InterruptedException {
+	public boolean configPhoneInfo() throws IOException, InterruptedException {
 		if (logger == null) {
 			logger = taskListener.getLogger();
 		}
 		writeDeviceTxt();
+		
 		String script = build.getTestScriptPath() + "//config_phone.bat";
 		if (Utils.isUnix()) {
 			script = build.getTestScriptPath() + "//config_phone.sh";
 		}
 		List<String> args = new ArrayList<String>();
-		args.add(String.valueOf(context.getSerial()));
+		args.add(context.getSerial());
+		args.add(task.getEmulator().getAvdName());
+		
 		Builder builder = this.getBuilder(script, args);
 		boolean result = builder.perform(build, androidSdk, task.getEmulator(), context, taskListener, "OK (1 test)");
 		if (!result) {
@@ -260,6 +276,32 @@ public abstract class AbstractRunner implements java.util.concurrent.Callable<Ta
 			task.setStatus(STATUS.NOT_BUILT);
 		} else {
 			log(logger, String.format("Config the phone information '%s' scussfully.", script));
+		}
+		return result;
+	}
+	
+	public boolean writeBuildProp() throws IOException, InterruptedException {
+		if (logger == null) {
+			logger = taskListener.getLogger();
+		}
+		
+		writeDeviceTxt();
+
+		String script = build.getTestScriptPath() + "//config_build_prop.bat";
+		if (Utils.isUnix()) {
+			script = build.getTestScriptPath() + "//config_build_prop.sh";
+		}
+		List<String> args = new ArrayList<String>();
+		args.add(String.valueOf(context.getSerial()));
+		args.add(task.getEmulator().getAvdName());
+
+		Builder builder = this.getBuilder(script, args);
+		boolean result = builder.perform(build, androidSdk, task.getEmulator(), context, taskListener, "Success.");
+		if (!result) {
+			log(logger, String.format("Write the build prop '%s' failed.", script));
+			task.setStatus(STATUS.NOT_BUILT);
+		} else {
+			log(logger, String.format("Write the build prop '%s' scussfully.", script));
 		}
 		return result;
 	}
@@ -286,7 +328,7 @@ public abstract class AbstractRunner implements java.util.concurrent.Callable<Ta
 	}
 
 	private void writeDeviceTxt() throws IOException, FileNotFoundException, JsonGenerationException, JsonMappingException {
-		File f = new File(build.getUserDataPath() + "//xposeDevice.txt");
+		File f = new File(build.getUserDataPath() + "//xposeDevice_" + task.getEmulator().getAvdName() + ".txt");
 		f.getParentFile().mkdirs();
 		f.createNewFile();
 		FileOutputStream file = new FileOutputStream(f);
