@@ -30,7 +30,7 @@ public class GenymotionRunner extends AbstractRunner {
 	}
 
 	@Override
-	public boolean startUp() throws IOException, InterruptedException {
+	public boolean startUp(boolean isRestoreFactory) throws IOException, InterruptedException {
 
 		if (logger == null) {
 			logger = taskListener.getLogger();
@@ -42,7 +42,7 @@ public class GenymotionRunner extends AbstractRunner {
 		final long bootTime = System.currentTimeMillis();
 
 		// play the genymotion emulator
-		boolean playSuccess = playGenymotion(emu);
+		boolean playSuccess = playGenymotion(emu, isRestoreFactory);
 		if (!playSuccess) {
 			log(logger, "Play the genymotion failed.");
 			task.setStatus(STATUS.NOT_BUILT);
@@ -97,7 +97,7 @@ public class GenymotionRunner extends AbstractRunner {
 		return true;
 	}
 
-	public boolean playGenymotion(final AndroidEmulatorContext emu) throws IOException, InterruptedException {
+	public boolean playGenymotion(final AndroidEmulatorContext emu, boolean isRestoreFactory) throws IOException, InterruptedException {
 
 		String script = build.getTestScriptPath() + "//genymotion_start.bat";
 		if (Utils.isUnix()) {
@@ -127,6 +127,8 @@ public class GenymotionRunner extends AbstractRunner {
 			
 			List<String> args = new ArrayList<String>();
 			args.add(task.getEmulator().getAvdName());
+			args.add(String.valueOf(isRestoreFactory));
+			
 			CommandLineBuilder builder = this.getBuilder(script, args);
 			final LocalProc emulatorProcess = new ProcStarter().cmds(builder.buildCommandLine()).stdout(emulatorLogger)
 					.envs(buildEnvironment).start();
