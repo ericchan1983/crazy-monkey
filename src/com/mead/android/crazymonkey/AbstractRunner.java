@@ -56,7 +56,7 @@ public abstract class AbstractRunner implements java.util.concurrent.Callable<Ta
 		this.taskListener = taskListener;
 	}
 
-	public abstract boolean startUp() throws IOException, InterruptedException;
+	public abstract boolean startUp(boolean isRestoreFactory) throws IOException, InterruptedException;
 
 	public abstract boolean tearDown() throws IOException, InterruptedException;
 
@@ -65,7 +65,7 @@ public abstract class AbstractRunner implements java.util.concurrent.Callable<Ta
 		try {
 			// start up the env
 			Thread.sleep(3000);
-			boolean isRunEmulatorSuccess = startUp();
+			boolean isRunEmulatorSuccess = startUp(true);
 			
 			if (!isRunEmulatorSuccess) {
 				return task;
@@ -77,7 +77,7 @@ public abstract class AbstractRunner implements java.util.concurrent.Callable<Ta
 				return task;
 			}
 			
-			isRunEmulatorSuccess = startUp();
+			isRunEmulatorSuccess = startUp(false);
 			
 			if (isRunEmulatorSuccess) {
 				// configure the phone

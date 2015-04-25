@@ -365,7 +365,7 @@ public class AndroidRunner extends AbstractRunner {
 		return;
 	}
 
-	public boolean startUp () throws InterruptedException, IOException {
+	public boolean startUp (boolean isRestoreFactory) throws InterruptedException, IOException {
 		
         final PrintStream logger = taskListener.getLogger();
         
