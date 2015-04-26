@@ -3,7 +3,7 @@
 vm_name=$1
 is_restore=$2
 if [ -n "$is_restore" ] && [ "$is_restore" != "false" ]; then
-	VBoxManage snapshot $vm_name restore "factory_2"
+	VBoxManage snapshot $vm_name restore "factory"
 fi
 
 # screen VBoxManage -startvm $vm_name
