@@ -216,6 +216,7 @@ public abstract class AbstractRunner implements java.util.concurrent.Callable<Ta
 
 		List<String> args = new ArrayList<String>();
 		args.add(context.getSerial());
+		args.add("backup_" + task.getJobId() + "_" + task.getPhone().getGetDeviceId() + ".tar.gz");
 
 		Builder builder = getBuilder(script, args);
 		int tryNum = 2;
