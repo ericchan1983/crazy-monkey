@@ -45,12 +45,14 @@ function writeBuildProp () {
 	setProp $device_Sn DEVICE ro.build.product $vm_name
 	setProp $device_Sn SDK ro.build.version.sdk $vm_name
 	setProp $device_Sn RELEASE ro.build.version.release $vm_name
+	setProp $device_Sn FINGERPRINT ro.build.fingerprint $vm_name
+	setProp $device_Sn FINGERPRINT ro.build.display.id $vm_name
 	addProp $device_Sn MODEL ro.product.model $vm_name
-
+	
 	echo "change ro.build.id=JWR66Y on the device '$device_Sn'"
 	$ANDROID_SDK_HOME/platform-tools/adb -s $device_Sn shell sed -i 's/^ro.build.id=.*/ro.build.id=JWR66Y/g' /system/build.prop
-	echo "change ro.build.display.id=JWR66Y on the device '$device_Sn'"
-	$ANDROID_SDK_HOME/platform-tools/adb -s $device_Sn shell sed -i 's/^ro.build.display.id=.*/ro.build.display.id=JWR66Y/g' /system/build.prop
+	#echo "change ro.build.display.id=JWR66Y on the device '$device_Sn'"
+	#$ANDROID_SDK_HOME/platform-tools/adb -s $device_Sn shell sed -i 's/^ro.build.display.id=.*/ro.build.display.id=JWR66Y/g' /system/build.prop
 }
 
 writeBuildProp $device_Sn $vm_name
