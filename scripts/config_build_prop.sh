@@ -18,7 +18,7 @@ function setProp () {
 
 	value=`getValue ${field} ${vm_name}`
 	echo "set $property=$value on the device '$device_Sn'"
-	$ANDROID_SDK_HOME/platform-tools/adb -s ${device_Sn} shell sed -i "s/^$property=.*/$property=$value/g" /system/build.prop
+	$ANDROID_SDK_HOME/platform-tools/adb -s ${device_Sn} shell sed -i "s#^$property=.*#$property=$value#g" /system/build.prop
 }
 
 function addProp () {
