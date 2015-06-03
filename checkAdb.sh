@@ -2,7 +2,7 @@
 
 echo "Checking Adb service"
 
-sleep 600
+sleep 1200
 
 source ./setenv.sh
 
@@ -11,10 +11,10 @@ do
 	adb devices && result=1 || result=0
 	if [ "$result" = "0" ]; then
 		echo "Restarting Crazy Monkey since Adb crashed..."
-		./boot.sh
+		cd $CRAZY_MONKEY_HOME && nohup ./boot.sh &
 		exit 0
 	fi
-	echo "Sleep 1800s"
-	sleep 1800
+	echo "Sleep 300s"
+	sleep 300
 done
 exit 0
