@@ -2,6 +2,8 @@
 
 source ./setenv.sh
 
+sleep 900
+
 while true
 do
 	running=0

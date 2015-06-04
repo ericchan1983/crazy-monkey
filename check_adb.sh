@@ -2,7 +2,7 @@
 
 echo "Checking Adb service"
 
-sleep 1200
+sleep 900
 
 source ./setenv.sh
 
