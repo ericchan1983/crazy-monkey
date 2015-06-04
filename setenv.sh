@@ -5,6 +5,8 @@ export USER=android
 export NETWORK_INTERFACE=eth0
 export DEFAULT_GATEWAY=192.168.3.1
 export EMULATOR_TYPE=GENY_MOTION
+export NODE_SERVER=http://192.168.3.2:3000
+export MAX_NUM=24
 
 export PROJECT_HOME=/home/$USER/crazy-monkey
 export JAVA_HOME=$PROJECT_HOME/jdk1.7.0_75
