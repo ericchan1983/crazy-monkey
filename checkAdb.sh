@@ -11,10 +11,10 @@ do
 	adb devices && result=1 || result=0
 	if [ "$result" = "0" ]; then
 		echo "Restarting Crazy Monkey since Adb crashed..."
-		cd $CRAZY_MONKEY_HOME && nohup ./boot.sh &
+		cd $CRAZY_MONKEY_HOME
+		nohup ./boot.sh
 		exit 0
 	fi
-	echo "Sleep 300s"
-	sleep 300
+	echo "Sleep 1200s"
+	sleep 1200
 done
-exit 0

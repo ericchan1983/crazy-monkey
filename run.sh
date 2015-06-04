@@ -17,8 +17,6 @@ cd $CRAZY_MONKEY_HOME && /bin/bash ./stop.sh
 # Run the vpn client
 cd $VPN_CLINET_HOME && ./autorun
 
-cd $CRAZY_MONKEY_HOME && /bin/bash ./checkAdb.sh &
-
 MAC_ADDRESS=`/sbin/ifconfig $NETWORK_INTERFACE | grep HWaddr | awk '{print $5}'`
 
 # Run the testing
