@@ -3,6 +3,7 @@
 /logs
 /dist
 /userdata
+/console/*_log
 *.class
 .classpath
 .project
