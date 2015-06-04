@@ -38,6 +38,7 @@
 		<mkdir dir="${build.dir}/bin" />
 		<mkdir dir="${build.dir}/apk" />
 		<mkdir dir="${build.dir}/logs" />
+		<mkdir dir="${build.dir}/console" />
 		<mkdir dir="${build.dir}/userdata" />
 	</target>
 

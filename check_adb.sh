@@ -15,6 +15,6 @@ do
 		nohup ./boot.sh
 		exit 0
 	fi
-	echo "Sleep 1200s"
-	sleep 1200
+	echo "Sleep 700s"
+	sleep 700
 done
