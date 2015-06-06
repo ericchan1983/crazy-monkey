@@ -14,7 +14,6 @@ if [ ! -d "/mnt/sdcard/backup/shell"]; then
 fi 
 
 mv /mnt/sdcard/userdata.tar.gz /mnt/sdcard/backup/userdata.tar.gz
-
 rm -r /mnt/sdcard/backup/shell/mnt
 rm -r /mnt/sdcard/backup/userdata/*
 tar xzvf /mnt/sdcard/backup/userdata.tar.gz -C /mnt/sdcard/backup/shell/
