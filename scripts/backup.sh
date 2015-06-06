@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/system/bin/sh
 package=$1
 
 if [ ! -d "/mnt/sdcard/backup"]; then
