@@ -14,10 +14,6 @@ do
 		cd $CRAZY_MONKEY_HOME
 		nohup ./boot.sh
 		break
-		#echo "Restarting the adb server"
-        #pgrep adb | xargs -rt kill -9
-        #adb start-server
-        #adb devices
 	fi
 	echo "Sleep 600s"
 	sleep 600

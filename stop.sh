@@ -1,8 +1,23 @@
 #!/bin/bash
+isStopMonitorScripts=$1
 
 # set the env
 source ./setenv.sh
 echo "-------------------- Clean the enviroment --------------------"
+
+function stopMonitorScripts () {
+	echo "[Crazy Monkey] Kill the check_adb script"
+	ps aux | grep "/bin/bash ./check_adb.sh" | grep -v grep | awk '{print $2}' | xargs -rt sudo kill -9
+	echo "[Crazy Monkey] Kill the check_status script"
+	ps aux | grep "/bin/bash ./check_status.sh" | grep -v grep | awk '{print $2}' | xargs -rt sudo kill -9
+	echo "[Crazy Monkey] Kill the update_apk script"
+	ps aux | grep "/bin/bash ./update_apk.sh" | grep -v grep | awk '{print $2}' | xargs -rt sudo kill -9
+}
+
+if [ "$isStopMonitorScripts" == "true" ]; then
+	stopMonitorScripts
+fi
+
 # reset the vpn state
 cd $CRAZY_MONKEY_HOME && /bin/bash ./reset_vpn.sh
 
